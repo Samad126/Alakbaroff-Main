@@ -5,7 +5,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master  # triggers on push to main
+      - master
 
 jobs:
   deploy:
@@ -27,5 +27,4 @@ jobs:
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /pool/www/alakbaroff.com
             git pull origin master
-            # add any build steps here, e.g.: npm install && npm run build
           EOF

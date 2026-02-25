@@ -1,22 +1,28 @@
 name: Deploy
+
 on:
   push:
     branches:
       - master
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Install sshpass
-        run: sudo apt-get install -y sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
       - name: Deploy to server
         env:
           SSHPASS: ${{ secrets.SSH_PASSWORD }}
         run: |
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
             git config --global --add safe.directory /pool/www/alakbaroff.com
-            sudo -u www-data git -C /pool/www/alakbaroff.com fetch origin master
-            sudo -u www-data git -C /pool/www/alakbaroff.com reset --hard origin/master
+            git -C /pool/www/alakbaroff.com fetch origin master
+            git -C /pool/www/alakbaroff.com reset --hard origin/master
           EOF

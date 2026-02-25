@@ -17,7 +17,6 @@ jobs:
         run: |
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             git config --global --add safe.directory /pool/www/alakbaroff.com
-            cd /pool/www/alakbaroff.com
-            git fetch origin master
-            git reset --hard origin/master
+            sudo -u www-data git -C /pool/www/alakbaroff.com fetch origin master
+            sudo -u www-data git -C /pool/www/alakbaroff.com reset --hard origin/master
           EOF
